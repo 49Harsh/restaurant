@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midnoon's — Flavours That Never Sleep</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0a07;
+    --bg2: #131009;
+    --card: #1a1510;
+    --border: #2e2518;
+    --accent: #e8a045;
+    --accent2: #c46b1a;
+    --gold: #f0c060;
+    --text: #f0e8d8;
+    --muted: #8a7860;
+    --white: #fff8ef;
+    --red: #d44a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 180px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 999;
+    padding: 18px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(13,10,7,0.97) 0%, rgba(13,10,7,0) 100%);
+    backdrop-filter: blur(4px);
+    border-bottom: 1px solid rgba(232,160,69,0.1);
+    transition: background 0.4s;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    text-decoration: none;
+    position: relative;
+  }
+  .logo span { color: var(--white); font-style: italic; font-weight: 300; }
+  .logo-dot { color: var(--red); font-size: 2.4rem; line-height: 0; vertical-align: -4px; }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--bg) !important;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 600 !important;
+    transition: background 0.3s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; transform: translateY(-1px); color: var(--bg) !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0 5%;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(196,107,26,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 20% 80%, rgba(212,74,42,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 60% at 80% 10%, rgba(232,160,69,0.08) 0%, transparent 50%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(232,160,69,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,160,69,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 680px;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,160,69,0.12);
+    border: 1px solid rgba(232,160,69,0.3);
+    color: var(--accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 30px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-badge::before { content: '●'; font-size: 0.5rem; animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 12px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .hero h1 .big-text {
+    display: block;
+    font-size: clamp(4.5rem, 11vw, 10rem);
+    color: var(--accent);
+    line-height: 0.9;
+    font-weight: 600;
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 24px 0 40px;
+    max-width: 420px;
+    font-weight: 300;
+    animation: fadeUp 0.8s 0.35s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 14px 32px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 8px 30px rgba(232,160,69,0.3);
+  }
+  .btn-primary:hover {
+    background: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(232,160,69,0.45);
+  }
+
+  .btn-ghost {
+    color: var(--text);
+    padding: 14px 28px;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(240,232,216,0.2);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-float {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    animation: fadeIn 1.2s 0.5s ease both;
+  }
+
+  .float-card {
+    background: rgba(26,21,16,0.8);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .float-card:hover { transform: translateY(-4px); border-color: rgba(232,160,69,0.4); }
+  .float-card .emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .float-card .fc-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .float-card .fc-val { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--accent); font-weight: 600; }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+    padding: 14px 0;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--muted);
+    padding: 0 32px;
+    letter-spacing: 0.06em;
+  }
+  .marquee-item span { color: var(--accent); margin-right: 28px; font-style: normal; font-size: 0.7rem; }
+
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ─── MENU SECTION ─── */
+  .menu-section {
+    padding: 90px 5% 120px;
+    position: relative;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .section-title em { font-style: italic; color: var(--accent); }
+  .section-divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 20px auto 0;
+  }
+
+  /* ─── CATEGORY TABS ─── */
+  .cat-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 52px;
+  }
+
+  .cat-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 9px 20px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .cat-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(232,160,69,0.3);
+  }
+
+  /* ─── MENU GRID ─── */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .menu-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    animation: fadeUp 0.5s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232,160,69,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .menu-item:hover {
+    transform: translateY(-4px);
+    border-color: rgba(232,160,69,0.35);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .menu-item:hover::before { opacity: 1; }
+
+  .item-left { display: flex; align-items: center; gap: 14px; }
+  .item-emoji { font-size: 1.7rem; min-width: 38px; text-align: center; }
+  .item-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+  }
+  .item-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 3px;
+    display: block;
+  }
+  .item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .item-price::before { content: '₹'; font-size: 0.85rem; opacity: 0.7; }
+
+  .hidden { display: none !important; }
+
+  /* ─── CATEGORY HEADING ─── */
+  .cat-heading {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0 8px;
+    margin-top: 16px;
+  }
+  .cat-heading h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--white);
+    white-space: nowrap;
+  }
+  .cat-heading h3 em { color: var(--accent); font-style: italic; }
+  .cat-line {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ─── ABOUT STRIP ─── */
+  .about-strip {
+    padding: 80px 5%;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .about-text .kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: block;
+  }
+  .about-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .about-text h2 em { color: var(--accent); font-style: italic; }
+  .about-text p {
+    color: var(--muted);
+    line-height: 1.8;
+    font-weight: 300;
+    font-size: 0.95rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .stat-box {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    background: var(--bg);
+    transition: border-color 0.3s;
+  }
+  .stat-box:hover { border-color: rgba(232,160,69,0.4); }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 50px 5% 30px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .footer-logo span { color: var(--white); font-style: italic; font-weight: 300; }
+  .footer-tagline {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 10px;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+  }
+
+  .footer-col h4 {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .footer-col p, .footer-col a {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 2;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    padding: 20px 5%;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom p { font-size: 0.78rem; color: var(--muted); }
+
+  /* ─── SCROLL TO TOP ─── */
+  .scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s, background 0.3s;
+    z-index: 998;
+    box-shadow: 0 4px 20px rgba(232,160,69,0.3);
+  }
+  .scroll-top.show { opacity: 1; transform: translateY(0); }
+  .scroll-top:hover { background: var(--gold); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero-float { display: none; }
+    .about-strip { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; gap: 28px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ─── SPECIAL BADGE ─── */
+  .special-badge {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(212,74,42,0.2);
+    color: #e87060;
+    border: 1px solid rgba(212,74,42,0.3);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  /* ─── BEVERAGE SECTION ─── */
+  .bev-subcategory {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .bev-subcategory span {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+  .bev-sub-line {
+    height: 1px;
+    flex: 1;
+    background: rgba(196,107,26,0.3);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="logo">Midnoon<span>'s</span><span class="logo-dot">.</span></a>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#menu" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Now Open — Dine In &amp; Takeaway</div>
+    <h1>
+      <em>Flavours</em> That<br>
+      <span class="big-text">Never Sleep</span>
+    </h1>
+    <p class="hero-sub">From sizzling momos to creamy pastas — Midnoon's brings bold street flavours, global bites and comfort classics under one roof.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-primary">Explore Menu</a>
+      <a href="#about" class="btn-ghost">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-float">
+    <div class="float-card">
+      <span class="emoji">🥟</span>
+      <div class="fc-val">Momos</div>
+      <div class="fc-label">from ₹105</div>
+    </div>
+    <div class="float-card">
+      <span class="emoji">🍕</span>
+      <div class="fc-val">Pizza</div>
+      <div class="fc-label">from ₹130</div>
+    </div>
+    <div class="float-card">
+      <span class="emoji">☕</span>
+      <div class="fc-val">Cold Coffee</div>
+      <div class="fc-label">from ₹130</div>
+    </div>
+    <div class="float-card">
+      <span class="emoji">🍜</span>
+      <div class="fc-val">Noodles</div>
+      <div class="fc-label">from ₹185</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- MENU SECTION -->
+<section class="menu-section" id="menu">
+  <div class="section-header">
+    <span class="section-label">What We Serve</span>
+    <h2 class="section-title">Our <em>Full Menu</em></h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <!-- CATEGORY TABS -->
+  <div class="cat-tabs" id="catTabs"></div>
+
+  <!-- MENU GRID -->
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<!-- ABOUT -->
+<div class="about-strip" id="about">
+  <div class="about-text">
+    <span class="kicker">Our Story</span>
+    <h2>A <em>Love Letter</em> to Good Food</h2>
+    <p>Midnoon's was born from a simple idea — that great food shouldn't come with a wait. We blend the boldness of Indian street food with global comfort classics, crafting every dish with fresh ingredients and genuine love. Whether it's a late-night craving or a daytime treat, we've got you covered.</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-box">
+      <span class="stat-num">50+</span>
+      <span class="stat-label">Menu Items</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Vegetarian</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">Fresh</span>
+      <span class="stat-label">Daily Prep</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">★ 4.8</span>
+      <span class="stat-label">Customer Rating</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div>
+    <div class="footer-logo">Midnoon<span>'s</span></div>
+    <div class="footer-tagline">Flavours That Never Sleep</div>
+  </div>
+  <div class="footer-col">
+    <h4>Quick Links</h4>
+    <a href="#home">Home</a>
+    <a href="#menu">Full Menu</a>
+    <a href="#about">About Us</a>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <p>📍 Your Restaurant Address</p>
+    <p>📞 +91 00000 00000</p>
+    <p>🕐 Open 10 AM – 11 PM</p>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2025 Midnoon's. All rights reserved.</p>
+  <p>Made with ❤️ for great food lovers</p>
+</div>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ─── MENU DATA ───
+const menuData = [
+  { cat: 'chilli-potato', catLabel: 'Chilli Potato', emoji: '🥔', items: [
+    { name: 'Classic Chilli Potato', price: 145 },
+    { name: 'Honey Chilli Potato', price: 165 },
+    { name: 'Peri-Peri Crispy Potato', price: 165 },
+  ]},
+  { cat: 'momos', catLabel: 'Momos', emoji: '🥟', items: [
+    { name: 'Classic Veg Momos (Steamed)', price: 105 },
+    { name: 'Classic Veg Momos (Fried)', price: 120 },
+    { name: 'Paneer Silk Momos (Steamed)', price: 125 },
+    { name: 'Paneer Silk Momos (Fried)', price: 140 },
+    { name: 'Corn Cheese Momos (Steamed)', price: 125 },
+    { name: 'Corn Cheese Momos (Fried)', price: 145 },
+    { name: 'Afghani Creamy Momos', price: 180, special: 'Chef\'s Pick' },
+    { name: 'Kurkure Fried Momos', price: 195, special: 'Popular' },
+    { name: "Midnoon's Royal Platter Momos", price: 205, special: 'Signature' },
+  ]},
+  { cat: 'noodles', catLabel: 'Noodles', emoji: '🍜', items: [
+    { name: 'Stylish Chowmein Deluxe', price: 185 },
+    { name: 'Veg Hakka Noodles', price: 215 },
+    { name: 'Schezwan Noodles', price: 230 },
+    { name: 'Butter Garlic Noodles', price: 245 },
+    { name: 'Chilli Garlic Noodles', price: 275 },
+    { name: 'Cheese Loaded Noodles', price: 285 },
+    { name: 'Singapore Noodles', price: 295 },
+  ]},
+  { cat: 'pasta', catLabel: 'Pasta', emoji: '🍝', items: [
+    { name: 'Rosso Italiano Pasta', price: 185 },
+    { name: 'Classic White Sauce Pasta', price: 185 },
+    { name: 'Creamy Pink Sauce Pasta', price: 215 },
+    { name: 'Spicy Arrabbiata Pasta', price: 225 },
+    { name: 'Cheesy Mushroom Alfredo Pasta', price: 235 },
+    { name: 'Pesto Paneer Pasta', price: 240 },
+    { name: 'Butter Garlic Pasta', price: 240 },
+    { name: 'Mexican Chipotle Pasta', price: 245 },
+  ]},
+  { cat: 'pizza', catLabel: 'Pizza', emoji: '🍕', items: [
+    { name: 'Margherita Classic', price: 135 },
+    { name: 'Farmhouse Veg Pizza', price: 130 },
+    { name: 'Makhani Indulgence Paneer Pizza', price: 130 },
+    { name: 'Cheesy Corn & Capsicum Pizza', price: 130 },
+    { name: 'Peri Peri Paneer Pizza', price: 130 },
+    { name: 'Schezwan Paneer Pizza', price: 130 },
+    { name: 'Spicy Jalapeno Delight', price: 130 },
+    { name: 'Desi Makhani Paneer Pizza', price: 130 },
+  ]},
+  { cat: 'burger', catLabel: 'Burger', emoji: '🍔', items: [
+    { name: 'Classic Veg Burger', price: 105 },
+    { name: 'Aloo Tikki Burger', price: 105 },
+    { name: 'Paneer Crunch Burger', price: 140 },
+    { name: 'Cheese Burst Burger', price: 145, special: 'Popular' },
+    { name: 'Peri Peri Burger', price: 130 },
+    { name: 'Tandoori Paneer Burger', price: 140 },
+    { name: 'Kurkure Crispy Burger', price: 135 },
+    { name: 'Schezwan Burger', price: 135 },
+  ]},
+  { cat: 'sandwich', catLabel: 'Sandwich', emoji: '🥪', items: [
+    { name: 'Veg Grilled Sandwich', price: 135 },
+    { name: 'Cheese Corn Sandwich', price: 140 },
+    { name: 'Paneer Tikka Sandwich', price: 150 },
+    { name: 'Peri Peri Sandwich', price: 145 },
+    { name: 'Bombay Masala Sandwich', price: 150 },
+    { name: 'Mayo Veggie Sandwich', price: 150 },
+    { name: 'Cheese Burst Sandwich', price: 160 },
+  ]},
+  { cat: 'fries', catLabel: 'Fries', emoji: '🍟', items: [
+    { name: 'Classic Salted Fries', price: 105 },
+    { name: 'Peri Peri Fries', price: 115 },
+    { name: 'Cheese Loaded Fries', price: 125 },
+    { name: 'Masala Fries', price: 115 },
+    { name: 'Schezwan Fries', price: 125 },
+    { name: 'Creamy Mayo Fries', price: 130 },
+  ]},
+  { cat: 'dosa', catLabel: 'Dosa', emoji: '🫓', items: [
+    { name: 'Plain Dosa', price: 75 },
+    { name: 'Masala Dosa', price: 85 },
+    { name: 'Butter Masala Dosa', price: 95 },
+    { name: 'Cheese Dosa', price: 115 },
+    { name: 'Paneer Dosa', price: 110 },
+    { name: 'Schezwan Dosa', price: 115 },
+    { name: 'Corn & Cheese Dosa', price: 115 },
+    { name: 'Rava Dosa', price: 130 },
+  ]},
+  { cat: 'pav-bhaji', catLabel: 'Pav Bhaji', emoji: '🫕', items: [
+    { name: 'Classic Pav Bhaji', price: 135 },
+    { name: 'Butter Pav Bhaji', price: 145 },
+    { name: 'Cheese Pav Bhaji', price: 155 },
+    { name: 'Masala Pav Bhaji', price: 155 },
+  ]},
+  { cat: 'beverages', catLabel: 'Beverages', emoji: '🧋', subCategories: [
+    { label: 'Cold Coffee ☕', items: [
+      { name: 'Classic Cold Coffee', price: 130 },
+      { name: 'Cold Coffee with Ice Cream', price: 140 },
+      { name: 'Chocolate Cold Coffee', price: 140 },
+      { name: 'Hazelnut Cold Coffee', price: 140 },
+      { name: 'Caramel Cold Coffee', price: 140 },
+      { name: 'Mocha Cold Coffee', price: 140 },
+      { name: 'Brownie Cold Coffee', price: 140 },
+    ]},
+    { label: 'Shakes 🥤', items: [
+      { name: 'Chocolate Shake', price: 140 },
+      { name: 'Oreo Obsession Shake', price: 145 },
+      { name: 'KitKat Breaker Shake', price: 145 },
+      { name: 'Strawberry Shake', price: 145 },
+      { name: 'Hazelnut Gold Rush Shake', price: 165 },
+      { name: 'Caramel Crown Shake', price: 165 },
+      { name: 'Brownie Bomb Shake', price: 165 },
+    ]},
+    { label: 'Tea 🍵', items: [
+      { name: 'Adrak Elaichi Special', price: 35 },
+      { name: 'Elaichi Cutting', price: 35 },
+      { name: 'Taj Special Cutting', price: 45 },
+      { name: 'Rose Milk Special', price: 55 },
+      { name: "Midnoon's Signature Sip", price: 65, special: 'Signature' },
+    ]},
+    { label: 'Mocktails 🍹', items: [
+      { name: 'Masala Citrus', price: 98 },
+      { name: 'Mint Majesty', price: 98 },
+      { name: 'Green Apple Zing Elixir', price: 98 },
+      { name: 'Azure Lagoon Splash', price: 108 },
+      { name: 'Citrus Chill Iced Brew', price: 108 },
+      { name: 'Peachy Bliss', price: 108 },
+    ]},
+  ]},
+];
+
+// ─── BUILD MARQUEE ───
+const marqueeItems = menuData.map(c => `<span class="marquee-item"><span>✦</span>${c.emoji} ${c.catLabel}</span>`).join('');
+const track = document.getElementById('marqueeTrack');
+track.innerHTML = marqueeItems.repeat(4);
+
+// ─── BUILD TABS ───
+const tabsEl = document.getElementById('catTabs');
+const allCats = [{ cat: 'all', catLabel: 'All Items', emoji: '✦' }, ...menuData];
+
+allCats.forEach(c => {
+  const btn = document.createElement('button');
+  btn.className = 'cat-tab' + (c.cat === 'all' ? ' active' : '');
+  btn.dataset.cat = c.cat;
+  btn.innerHTML = `${c.emoji} ${c.catLabel}`;
+  btn.addEventListener('click', () => filterMenu(c.cat, btn));
+  tabsEl.appendChild(btn);
+});
+
+// ─── BUILD MENU ───
+const grid = document.getElementById('menuGrid');
+
+menuData.forEach(cat => {
+  // Category heading
+  const heading = document.createElement('div');
+  heading.className = 'cat-heading';
+  heading.dataset.cat = cat.cat;
+  heading.innerHTML = `<h3>${cat.emoji} <em>${cat.catLabel}</em></h3><div class="cat-line"></div>`;
+  grid.appendChild(heading);
+
+  if (cat.subCategories) {
+    cat.subCategories.forEach(sub => {
+      const subHead = document.createElement('div');
+      subHead.className = 'bev-subcategory';
+      subHead.dataset.cat = cat.cat;
+      subHead.innerHTML = `<span>${sub.label}</span><div class="bev-sub-line"></div>`;
+      grid.appendChild(subHead);
+
+      sub.items.forEach((item, i) => {
+        grid.appendChild(buildCard(item, cat.cat, i));
+      });
+    });
+  } else {
+    cat.items.forEach((item, i) => {
+      grid.appendChild(buildCard(item, cat.cat, i));
+    });
+  }
+});
+
+function buildCard(item, cat, i) {
+  const card = document.createElement('div');
+  card.className = 'menu-item';
+  card.dataset.cat = cat;
+  card.style.animationDelay = `${(i % 8) * 0.05}s`;
+  card.innerHTML = `
+    ${item.special ? `<span class="special-badge">${item.special}</span>` : ''}
+    <div class="item-left">
+      <div class="item-name">${item.name}</div>
+    </div>
+    <div class="item-price">${item.price}</div>
+  `;
+  return card;
+}
+
+// ─── FILTER ───
+function filterMenu(cat, activeBtn) {
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  activeBtn.classList.add('active');
+
+  document.querySelectorAll('[data-cat]').forEach(el => {
+    if (cat === 'all' || el.dataset.cat === cat) {
+      el.classList.remove('hidden');
+    } else {
+      el.classList.add('hidden');
+    }
+  });
+}
+
+// ─── SCROLL TOP ───
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('show', window.scrollY > 400);
+});
+
+// ─── NAVBAR SCROLL ───
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) {
+    nav.style.background = 'rgba(13,10,7,0.97)';
+    nav.style.backdropFilter = 'blur(12px)';
+  } else {
+    nav.style.background = '';
+    nav.style.backdropFilter = '';
+  }
+});
+
+// ─── INTERSECTION OBSERVER for cards ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.menu-item').forEach(card => {
+  card.style.opacity = '0';
+  card.style.transition = 'opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, box-shadow 0.3s';
+  observer.observe(card);
+});
+</script>
+</body>
+</html>
